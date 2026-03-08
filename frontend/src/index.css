@@ -1,1 +1,7 @@
+@import url(https://fonts.google.com/specimen/Josefin+Sans);
 @import "tailwindcss";
+
+
+@theme {
+  --font-josefin-sans: "Josefin Sans", sans-serif;
+}
