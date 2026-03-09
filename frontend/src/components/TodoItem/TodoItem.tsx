@@ -13,7 +13,7 @@ function TodoItem({ taskName }: TodoItemProps) {
             name=""
             id=""
           />
-          <p className="font-josefin-sans text-[12px]/[100%] tracking-[-0.25px] text-[#494C6B]">
+          <p className="w-[220px] truncate font-josefin-sans text-[12px]/[100%] tracking-[-0.25px] text-[#494C6B]">
             {taskName}
           </p>
         </div>
