@@ -1,24 +1,39 @@
 import TodoItem from "../TodoItem/TodoItem";
 import TabBar from "../TabBar/TabBar";
+import { useState } from "react";
 
 function App() {
+  const [mode, setMode] = useState("light");
+  const [iconImgUrl, setIconImgUrl] = useState("/icon-moon.svg");
+  const [bgImgUrl, setBgImgUrl] = useState("/bg-mobile-light.jpg");
+  const [bgDesktopImgUrl, setBgDesktopImgUrl] = useState(
+    "/bg-desktop-light.jpg",
+  );
+
+  function handleDarkModeToggle() {
+    if (mode === "light") {
+      setMode("dark");
+      setIconImgUrl("/icon-sun.svg");
+      setBgImgUrl("/bg-mobile-dark.jpg");
+      setBgDesktopImgUrl("/bg-desktop-dark.jpg");
+    } else {
+      setMode("light");
+      setIconImgUrl("/icon-moon.svg");
+      setBgImgUrl("/bg-mobile-light.jpg");
+      setBgDesktopImgUrl("/bg-desktop-light.jpg");
+    }
+  }
+
   return (
     <>
-      <div className="relative flex h-screen flex-col items-center bg-[#FAFAFA] dark:bg-[#171823]">
+      <div
+        className={`${mode} relative flex h-screen flex-col items-center bg-[#FAFAFA] dark:bg-[#171823]`}
+      >
         <picture className="w-full">
-          <source
-            srcSet="/bg-desktop-dark.jpg"
-            media="(prefers-color-scheme: dark) and ( width >= 640px)"
-          />
-          <source srcSet="/bg-desktop-light.jpg" media="(width >= 640px)" />
-
-          <source
-            srcSet="/bg-mobile-dark.jpg"
-            media="(prefers-color-scheme: dark)"
-          />
+          <source srcSet={`${bgDesktopImgUrl}`} media="(width >= 640px)" />
           <img
             className="h-auto w-full object-cover"
-            src="/bg-mobile-light.jpg"
+            src={`${bgImgUrl}`}
             alt="MDN"
           />
         </picture>
@@ -26,13 +41,11 @@ function App() {
           <div className="mx-auto flex max-w-[540px] flex-col gap-[40px] px-[20px]">
             <div className="flex items-center justify-between">
               <p className="text-[30px] tracking-[0.4em] text-white">TODO</p>
-              <picture>
-                <source
-                  srcSet="/icon-sun.svg"
-                  media="(prefers-color-scheme: dark)"
-                />
-                <img src="/icon-moon.svg" alt="" />
-              </picture>
+              <img
+                onClick={handleDarkModeToggle}
+                src={`${iconImgUrl}`}
+                alt=""
+              />
             </div>
             <div className="flex flex-col gap-[16px] drop-shadow-2xl">
               <div className="flex h-[48px] items-center rounded-[5px] bg-white px-[20.11px] text-[12px]/[100%] dark:bg-[#25273D] dark:text-[#9495A5]">
@@ -54,13 +67,15 @@ function App() {
                 <TodoItem taskName="Complete Todo App on Frontend Mentor" />
                 <div className="flex h-[48px] items-center rounded-b-[5px] bg-white px-[20.11px] py-[16px] text-[12px]/[100%] dark:bg-[#25273D]">
                   <div className="flex w-full items-center justify-between font-josefin-sans text-[#9495A5] dark:text-[#5B5E7E]">
-                    <div className="text-[12px]/[100%] tracking-[-0.25px]">
+                    <div className="text-[12px]/[100%] tracking-[-0.25px] hover:text-[#494C6B]">
                       5 items left
                     </div>
                     <div className="hidden sm:block">
                       <TabBar />
                     </div>
-                    <div>Clear Completed</div>
+                    <div className="hover:text-[#494C6B] active:text-[#494C6B]">
+                      Clear Completed
+                    </div>
                   </div>
                 </div>
               </div>

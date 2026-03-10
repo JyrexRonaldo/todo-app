@@ -5,3 +5,5 @@
 @theme {
   --font-josefin-sans: "Josefin Sans", sans-serif;
 }
+
+@custom-variant dark (&:where(.dark, .dark *));
