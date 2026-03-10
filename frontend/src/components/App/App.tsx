@@ -1,4 +1,5 @@
 import TodoItem from "../TodoItem/TodoItem";
+import TabBar from "../TabBar/TabBar";
 
 function App() {
   return (
@@ -12,19 +13,21 @@ function App() {
             alt="MDN"
           />
         </picture>
-        <div className="absolute top-[48px] h-screen w-full bg-red-600/0  ">
-          <div className=" px-[20px] flex max-w-[540px] mx-auto flex-col gap-[40px]">
+        <div className="absolute top-[48px] h-screen w-full bg-red-600/0">
+          <div className="mx-auto flex max-w-[540px] flex-col gap-[40px] px-[20px]">
             <div className="flex items-center justify-between">
               <p className="text-[30px] tracking-[0.4em] text-white">TODO</p>
               <img src="/icon-moon.svg" alt="" />
             </div>
             <div className="flex flex-col gap-[16px]">
               <div className="flex h-[48px] items-center rounded-[5px] bg-white px-[20.11px] text-[12px]/[100%]">
+                <div className="mr-[16px] h-[20px] w-[20px] rounded-[50%] border border-[#979797]"></div>
                 <input
                   type="text"
                   placeholder="Create a new todo..."
                   name=""
                   id=""
+                  className="w-full text-[12px]/[100%] outline-none"
                 />
               </div>
               <div className="divide-y divide-[#C8CBE7] rounded-[5px] bg-white">
@@ -35,15 +38,18 @@ function App() {
                 <TodoItem taskName="Pick up groceries" />
                 <TodoItem taskName="Complete Todo App on Frontend Mentor" />
                 <div className="flex h-[48px] items-center rounded-b-[5px] bg-white px-[20.11px] py-[16px] text-[12px]/[100%]">
-                  <div className="flex justify-between w-full text-[#9495A5]">
+                  <div className="flex w-full items-center justify-between text-[#9495A5]">
                     <div className="text-[12px]/[100%] tracking-[-0.25px]">
                       5 items left
+                    </div>
+                    <div className="hidden sm:block">
+                      <TabBar />
                     </div>
                     <div>Clear Completed</div>
                   </div>
                 </div>
               </div>
-              <div className="flex h-[48px] items-center justify-center gap-[10px] rounded-[5px] bg-white font-josefin-sans text-[14px]/[100%] tracking-[-0.25px] text-[#9495A5]">
+              {/* <div className="flex h-[48px] items-center justify-center gap-[10px] rounded-[5px] bg-white font-josefin-sans text-[14px]/[100%] tracking-[-0.25px] text-[#9495A5]">
                 <button className="hover:text-[#3A7CFD] active:text-[#3A7CFD]">
                   All
                 </button>
@@ -53,6 +59,9 @@ function App() {
                 <button className="hover:text-[#3A7CFD] active:text-[#3A7CFD]">
                   Completed
                 </button>
+              </div> */}
+              <div className="sm:hidden">
+                <TabBar />
               </div>
             </div>
             <p className="self-center text-[#9495A5]">
