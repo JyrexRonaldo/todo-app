@@ -19,7 +19,7 @@ function App() {
               <p className="text-[30px] tracking-[0.4em] text-white">TODO</p>
               <img src="/icon-moon.svg" alt="" />
             </div>
-            <div className="flex flex-col gap-[16px]">
+            <div className="flex flex-col gap-[16px] drop-shadow-2xl">
               <div className="flex h-[48px] items-center rounded-[5px] bg-white px-[20.11px] text-[12px]/[100%]">
                 <div className="mr-[16px] h-[20px] w-[20px] rounded-[50%] border border-[#979797]"></div>
                 <input
@@ -53,7 +53,7 @@ function App() {
                 <TabBar />
               </div>
             </div>
-            <p className="self-center text-[#9495A5]">
+            <p className="self-center text-[14px]/[100%] tracking-[-0.25px] text-[#9495A5]">
               Drag and drop to reorder list
             </p>
           </div>
