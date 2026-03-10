@@ -4,7 +4,7 @@ import TabBar from "../TabBar/TabBar";
 function App() {
   return (
     <>
-      <div className="relative flex h-screen flex-col items-center bg-[#FAFAFA]">
+      <div className="relative flex h-screen flex-col items-center bg-[#FAFAFA] dark:bg-[#171823]">
         <picture className="w-full">
           <source srcSet="/bg-desktop-light.jpg" media="(width >= 640px)" />
           <img
@@ -20,7 +20,7 @@ function App() {
               <img src="/icon-moon.svg" alt="" />
             </div>
             <div className="flex flex-col gap-[16px] drop-shadow-2xl">
-              <div className="flex h-[48px] items-center rounded-[5px] bg-white px-[20.11px] text-[12px]/[100%]">
+              <div className="flex h-[48px] items-center rounded-[5px] bg-white px-[20.11px] text-[12px]/[100%] dark:bg-[#25273D] dark:text-[#9495A5]">
                 <div className="mr-[16px] h-[20px] w-[20px] rounded-[50%] border border-[#979797]"></div>
                 <input
                   type="text"
@@ -30,15 +30,15 @@ function App() {
                   className="w-full text-[12px]/[100%] outline-none"
                 />
               </div>
-              <div className="divide-y divide-[#C8CBE7] rounded-[5px] bg-white">
+              <div className="divide-y divide-[#C8CBE7] rounded-[5px] bg-white dark:divide-[#393A4B] dark:bg-[#25273D]">
                 <TodoItem taskName="Complete online JavaScript course" />
                 <TodoItem taskName="Jog around the park 3x" />
                 <TodoItem taskName="10 minutes meditation" />
                 <TodoItem taskName="Read for 1 hour" />
                 <TodoItem taskName="Pick up groceries" />
                 <TodoItem taskName="Complete Todo App on Frontend Mentor" />
-                <div className="flex h-[48px] items-center rounded-b-[5px] bg-white px-[20.11px] py-[16px] text-[12px]/[100%]">
-                  <div className="flex w-full items-center justify-between text-[#9495A5]">
+                <div className="flex h-[48px] items-center rounded-b-[5px] bg-white px-[20.11px] py-[16px] text-[12px]/[100%] dark:bg-[#25273D]">
+                  <div className="flex w-full items-center justify-between text-[#9495A5] dark:text-[#5B5E7E]">
                     <div className="text-[12px]/[100%] tracking-[-0.25px]">
                       5 items left
                     </div>
@@ -53,7 +53,7 @@ function App() {
                 <TabBar />
               </div>
             </div>
-            <p className="self-center text-[14px]/[100%] tracking-[-0.25px] text-[#9495A5]">
+            <p className="self-center text-[14px]/[100%] tracking-[-0.25px] text-[#9495A5] dark:text-[#5B5E7E]">
               Drag and drop to reorder list
             </p>
           </div>
