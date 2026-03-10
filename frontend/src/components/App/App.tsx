@@ -6,7 +6,16 @@ function App() {
     <>
       <div className="relative flex h-screen flex-col items-center bg-[#FAFAFA] dark:bg-[#171823]">
         <picture className="w-full">
+          <source
+            srcSet="/bg-desktop-dark.jpg"
+            media="(prefers-color-scheme: dark) and ( width >= 640px)"
+          />
           <source srcSet="/bg-desktop-light.jpg" media="(width >= 640px)" />
+
+          <source
+            srcSet="/bg-mobile-dark.jpg"
+            media="(prefers-color-scheme: dark)"
+          />
           <img
             className="h-auto w-full object-cover"
             src="/bg-mobile-light.jpg"
@@ -17,7 +26,13 @@ function App() {
           <div className="mx-auto flex max-w-[540px] flex-col gap-[40px] px-[20px]">
             <div className="flex items-center justify-between">
               <p className="text-[30px] tracking-[0.4em] text-white">TODO</p>
-              <img src="/icon-moon.svg" alt="" />
+              <picture>
+                <source
+                  srcSet="/icon-sun.svg"
+                  media="(prefers-color-scheme: dark)"
+                />
+                <img src="/icon-moon.svg" alt="" />
+              </picture>
             </div>
             <div className="flex flex-col gap-[16px] drop-shadow-2xl">
               <div className="flex h-[48px] items-center rounded-[5px] bg-white px-[20.11px] text-[12px]/[100%] dark:bg-[#25273D] dark:text-[#9495A5]">
