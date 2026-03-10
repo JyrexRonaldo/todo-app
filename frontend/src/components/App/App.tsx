@@ -12,8 +12,8 @@ function App() {
             alt="MDN"
           />
         </picture>
-        <div className="absolute h-screen w-full bg-red-600/0">
-          <div className="top-[48px] mx-[20px] flex flex-col gap-[40px] ">
+        <div className="absolute top-[48px] h-screen w-full bg-red-600/0  ">
+          <div className=" px-[20px] flex max-w-[540px] mx-auto flex-col gap-[40px]">
             <div className="flex items-center justify-between">
               <p className="text-[30px] tracking-[0.4em] text-white">TODO</p>
               <img src="/icon-moon.svg" alt="" />
@@ -35,7 +35,7 @@ function App() {
                 <TodoItem taskName="Pick up groceries" />
                 <TodoItem taskName="Complete Todo App on Frontend Mentor" />
                 <div className="flex h-[48px] items-center rounded-b-[5px] bg-white px-[20.11px] py-[16px] text-[12px]/[100%]">
-                  <div className="flex justify-between text-[#9495A5]">
+                  <div className="flex justify-between w-full text-[#9495A5]">
                     <div className="text-[12px]/[100%] tracking-[-0.25px]">
                       5 items left
                     </div>
