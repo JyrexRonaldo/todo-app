@@ -42,7 +42,7 @@ function App() {
                   placeholder="Create a new todo..."
                   name=""
                   id=""
-                  className="w-full text-[12px]/[100%] outline-none"
+                  className="w-full font-josefin-sans text-[12px]/[100%] outline-none"
                 />
               </div>
               <div className="divide-y divide-[#C8CBE7] rounded-[5px] bg-white dark:divide-[#393A4B] dark:bg-[#25273D]">
@@ -53,7 +53,7 @@ function App() {
                 <TodoItem taskName="Pick up groceries" />
                 <TodoItem taskName="Complete Todo App on Frontend Mentor" />
                 <div className="flex h-[48px] items-center rounded-b-[5px] bg-white px-[20.11px] py-[16px] text-[12px]/[100%] dark:bg-[#25273D]">
-                  <div className="flex w-full items-center justify-between text-[#9495A5] dark:text-[#5B5E7E]">
+                  <div className="flex w-full items-center justify-between font-josefin-sans text-[#9495A5] dark:text-[#5B5E7E]">
                     <div className="text-[12px]/[100%] tracking-[-0.25px]">
                       5 items left
                     </div>
@@ -68,7 +68,7 @@ function App() {
                 <TabBar />
               </div>
             </div>
-            <p className="self-center text-[14px]/[100%] tracking-[-0.25px] text-[#9495A5] dark:text-[#5B5E7E]">
+            <p className="self-center font-josefin-sans text-[14px]/[100%] tracking-[-0.25px] text-[#9495A5] dark:text-[#5B5E7E]">
               Drag and drop to reorder list
             </p>
           </div>
