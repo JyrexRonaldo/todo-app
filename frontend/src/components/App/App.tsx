@@ -1,6 +1,6 @@
 import TodoItem from "../TodoItem/TodoItem";
 import TabBar from "../TabBar/TabBar";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function App() {
   const [mode, setMode] = useState("light");
@@ -24,6 +24,17 @@ function App() {
     }
   }
 
+  useEffect(() => {
+    if (mode === "light") {
+      document.body.classList.remove("dark");
+    } else {
+      document.body.classList.add("dark");
+    }
+    return () => {
+      document.body.classList.remove("your-class-name");
+    };
+  }, [mode]);
+
   return (
     <>
       <div
@@ -37,8 +48,8 @@ function App() {
             alt="MDN"
           />
         </picture>
-        <div className="absolute top-[48px] h-screen w-full bg-red-600/0">
-          <div className="mx-auto flex max-w-[540px] flex-col gap-[40px] px-[20px]">
+        <div className="absolute h-screen w-full bg-red-600/0">
+          <div className="mx-auto mt-[48px] flex max-w-[540px] flex-col gap-[40px] px-[20px]">
             <div className="flex items-center justify-between">
               <p className="text-[30px] tracking-[0.4em] text-white">TODO</p>
               <img
@@ -49,7 +60,7 @@ function App() {
             </div>
             <div className="flex flex-col gap-[16px] drop-shadow-2xl">
               <div className="flex h-[48px] items-center rounded-[5px] bg-white px-[20.11px] text-[12px]/[100%] dark:bg-[#25273D] dark:text-[#9495A5]">
-                <div className="mr-[16px] h-[20px] w-[20px] rounded-[50%] border border-[#979797]"></div>
+                <div className="mr-[16px] h-[20px] w-[20px] rounded-[50%] border border-[#979797] dark:border-[#393A4B]"></div>
                 <input
                   type="text"
                   placeholder="Create a new todo..."
@@ -67,13 +78,13 @@ function App() {
                 <TodoItem taskName="Complete Todo App on Frontend Mentor" />
                 <div className="flex h-[48px] items-center rounded-b-[5px] bg-white px-[20.11px] py-[16px] text-[12px]/[100%] dark:bg-[#25273D]">
                   <div className="flex w-full items-center justify-between font-josefin-sans text-[#9495A5] dark:text-[#5B5E7E]">
-                    <div className="text-[12px]/[100%] tracking-[-0.25px] hover:text-[#494C6B]">
+                    <div className="text-[12px]/[100%] tracking-[-0.25px] hover:text-[#494C6B] sm:text-[14px] dark:hover:text-[#C8CBE7]">
                       5 items left
                     </div>
                     <div className="hidden sm:block">
                       <TabBar />
                     </div>
-                    <div className="hover:text-[#494C6B] active:text-[#494C6B]">
+                    <div className="text-[12px]/[100%] tracking-[-0.25px] hover:text-[#494C6B] active:text-[#3A7CFD] sm:text-[14px] dark:hover:text-[#C8CBE7]">
                       Clear Completed
                     </div>
                   </div>

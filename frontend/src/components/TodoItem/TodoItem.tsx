@@ -7,7 +7,7 @@ function TodoItem({ taskName }: TodoItemProps) {
     <div className="flex h-[48px] items-center px-[20.11px] py-[16px] first:rounded-t-[5px]">
       <div className="flex w-full items-center gap-[16px]">
         <input
-          className="relative h-[20px] w-[20px] appearance-none rounded-[50%] border border-[#979797] align-[-2px] text-white before:invisible before:absolute before:top-[-1px] before:right-[-1px] before:block before:size-[20px] before:rounded-full before:bg-linear-135 before:from-[hsl(192,100%,67%)] before:to-[hsl(280,87%,65%)] after:invisible after:absolute after:top-[-1px] after:left-[3.5px] after:block after:text-[13px] after:content-['✓'] checked:before:visible checked:after:visible dark:border-[#393A4B]"
+          className="custom-hover relative h-[20px] w-[20px] appearance-none rounded-[50%] border border-[#979797] align-[-2px] text-white before:invisible before:absolute before:top-[-1px] before:right-[-1px] before:block before:size-[20px] before:rounded-full before:bg-linear-135 before:from-[hsl(192,100%,67%)] before:to-[hsl(280,87%,65%)] after:invisible after:absolute after:top-[-1px] after:left-[3.5px] after:block after:text-[13px] after:content-['✓'] checked:before:visible checked:after:visible dark:border-[#393A4B]"
           type="checkbox"
           name=""
           id=""
