@@ -56,6 +56,7 @@ function App() {
                 onClick={handleDarkModeToggle}
                 src={`${iconImgUrl}`}
                 alt=""
+                className="active:rotate-360 transition duration-150"
               />
             </div>
             <div className="flex flex-col gap-[16px] drop-shadow-2xl">
@@ -66,7 +67,7 @@ function App() {
                   placeholder="Create a new todo..."
                   name=""
                   id=""
-                  className="w-full font-josefin-sans text-[12px]/[100%] outline-none"
+                  className="w-full font-josefin-sans text-[12px]/[100%] outline-none sm:text-[18px]/[100%]"
                 />
               </div>
               <div className="divide-y divide-[#C8CBE7] rounded-[5px] bg-white dark:divide-[#393A4B] dark:bg-[#25273D]">
@@ -78,7 +79,7 @@ function App() {
                 <TodoItem taskName="Complete Todo App on Frontend Mentor" />
                 <div className="flex h-[48px] items-center rounded-b-[5px] bg-white px-[20.11px] py-[16px] text-[12px]/[100%] dark:bg-[#25273D]">
                   <div className="flex w-full items-center justify-between font-josefin-sans text-[#9495A5] dark:text-[#5B5E7E]">
-                    <div className="text-[12px]/[100%] tracking-[-0.25px] hover:text-[#494C6B] sm:text-[14px] dark:hover:text-[#C8CBE7]">
+                    <div className="text-[12px]/[100%] tracking-[-0.25px]  sm:text-[14px]">
                       5 items left
                     </div>
                     <div className="hidden sm:block">
