@@ -10,6 +10,12 @@ function App() {
     "/bg-desktop-light.jpg",
   );
   const [todoTitle, setTodoTitle] = useState("");
+  const [allTodos, setAllTodos] = useState<
+    Array<{
+      id: number;
+      title: string;
+    }>
+  >([]);
 
   function handleTodoInput(
     e: React.ChangeEvent<HTMLInputElement, HTMLInputElement>,
@@ -34,8 +40,14 @@ function App() {
           },
         );
 
-        const data = await response.json();
-        console.log(data);
+        const data: Array<{
+          id: number;
+          title: string;
+        }> = await response.json();
+        // if (allTodos !== null) {
+        console.log(data, "line 45");
+        setAllTodos([...allTodos, ...data]);
+        // }
       } catch (error) {
         console.log(error);
       }
@@ -67,6 +79,39 @@ function App() {
       document.body.classList.remove("your-class-name");
     };
   }, [mode]);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_HOME_DOMAIN}/api/todos`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          },
+        );
+
+        const data: Array<{
+          id: number;
+          title: string;
+        }> = await response.json();
+
+        setAllTodos(data);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    fetchData();
+  }, []);
+
+  const todoElements = allTodos.map(
+    (element: { id: number; title: string }) => {
+      const title = element.title;
+      return <TodoItem key={self.crypto.randomUUID()} taskName={title} />;
+    },
+  );
 
   return (
     <>
@@ -107,15 +152,16 @@ function App() {
                 />
               </div>
               <div className="divide-y divide-[#C8CBE7] rounded-[5px] bg-white dark:divide-[#393A4B] dark:bg-[#25273D]">
-                {/* <TodoItem taskName="Complete online JavaScript course" />
-                <TodoItem taskName="Jog around the park 3x" />
-                <TodoItem taskName="10 minutes meditation" />
-                <TodoItem taskName="Read for 1 hour" />
-                <TodoItem taskName="Pick up groceries" />
-                <TodoItem taskName="Complete Todo App on Frontend Mentor" /> */}
-                <div className="flex h-[58px] items-center justify-center">
-                  <p className=" font-josefin-sans text-[12px]/[100%] tracking-[-0.25px]  sm:text-[18px]/[100%] text-[#9495A5] dark:text-[#5B5E7E]">No todos here!</p>
-                </div>
+                {allTodos[0] ? (
+                  todoElements
+                ) : (
+                  <div className="flex h-[58px] items-center justify-center">
+                    <p className="font-josefin-sans text-[12px]/[100%] tracking-[-0.25px] text-[#9495A5] sm:text-[18px]/[100%] dark:text-[#5B5E7E]">
+                      No todos here!
+                    </p>
+                  </div>
+                )}
+
                 <div className="flex h-[48px] items-center rounded-b-[5px] bg-white px-[20.11px] py-[16px] text-[12px]/[100%] dark:bg-[#25273D]">
                   <div className="flex w-full items-center justify-between font-josefin-sans text-[#9495A5] dark:text-[#5B5E7E]">
                     <div className="text-[12px]/[100%] tracking-[-0.25px] sm:text-[14px]">
