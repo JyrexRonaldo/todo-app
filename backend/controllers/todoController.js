@@ -1,11 +1,11 @@
 const db = require("../config/drizzle");
 const { todosTable } = require("../db/schema");
 
-// const getTodos = async (req, res) => {
-//   const { todo } = req.body;
-//   await db.insert(todosTable).values({ todo });
-//   res.json("Todo created");
-// };
+const getTodos = async (req, res) => {
+  // const { todo } = req.body;
+  const result = await db.select().from(todosTable);
+  res.json(result);
+};
 
 const createTodos = async (req, res) => {
   console.log(req.body)
@@ -15,6 +15,6 @@ const createTodos = async (req, res) => {
 };
 
 module.exports = {
-  // getTodos,
+  getTodos,
   createTodos
 };
