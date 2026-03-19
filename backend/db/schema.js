@@ -7,9 +7,14 @@ const { integer, pgTable, varchar } = require("drizzle-orm/pg-core");
 //   email: varchar({ length: 255 }).notNull(),
 // });
 
-const todoTable = pgTable("todos", {
+const usersTable = pgTable("users", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
   title: varchar({ length: 255 }).notNull(),
 });
 
-module.exports = { todoTable };
+const todosTable = pgTable("todos", {
+  id: integer().primaryKey().generatedAlwaysAsIdentity(),
+  title: varchar({ length: 255 }).notNull(),
+});
+
+module.exports = { todosTable };

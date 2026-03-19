@@ -9,6 +9,39 @@ function App() {
   const [bgDesktopImgUrl, setBgDesktopImgUrl] = useState(
     "/bg-desktop-light.jpg",
   );
+  const [todoTitle, setTodoTitle] = useState("");
+
+  function handleTodoInput(
+    e: React.ChangeEvent<HTMLInputElement, HTMLInputElement>,
+  ) {
+    setTodoTitle(e.target.value);
+  }
+
+  async function handleAddTodo(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === "Enter") {
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_HOME_DOMAIN}/api/todos`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              // Authorization: `${localStorage.getItem('userToken')}`,
+            },
+            body: JSON.stringify({
+              title: `${todoTitle}`,
+            }),
+          },
+        );
+
+        const data = await response.json();
+        console.log(data);
+      } catch (error) {
+        console.log(error);
+      }
+      setTodoTitle("");
+    }
+  }
 
   function handleDarkModeToggle() {
     if (mode === "light") {
@@ -56,7 +89,7 @@ function App() {
                 onClick={handleDarkModeToggle}
                 src={`${iconImgUrl}`}
                 alt=""
-                className="active:rotate-360 transition duration-150"
+                className="transition duration-150 active:rotate-360"
               />
             </div>
             <div className="flex flex-col gap-[16px] drop-shadow-2xl">
@@ -67,19 +100,25 @@ function App() {
                   placeholder="Create a new todo..."
                   name=""
                   id=""
+                  onKeyUp={handleAddTodo}
+                  onChange={handleTodoInput}
+                  value={todoTitle}
                   className="w-full font-josefin-sans text-[12px]/[100%] outline-none sm:text-[18px]/[100%]"
                 />
               </div>
               <div className="divide-y divide-[#C8CBE7] rounded-[5px] bg-white dark:divide-[#393A4B] dark:bg-[#25273D]">
-                <TodoItem taskName="Complete online JavaScript course" />
+                {/* <TodoItem taskName="Complete online JavaScript course" />
                 <TodoItem taskName="Jog around the park 3x" />
                 <TodoItem taskName="10 minutes meditation" />
                 <TodoItem taskName="Read for 1 hour" />
                 <TodoItem taskName="Pick up groceries" />
-                <TodoItem taskName="Complete Todo App on Frontend Mentor" />
+                <TodoItem taskName="Complete Todo App on Frontend Mentor" /> */}
+                <div className="flex h-[58px] items-center justify-center">
+                  <p className=" font-josefin-sans text-[12px]/[100%] tracking-[-0.25px]  sm:text-[18px]/[100%] text-[#9495A5] dark:text-[#5B5E7E]">No todos here!</p>
+                </div>
                 <div className="flex h-[48px] items-center rounded-b-[5px] bg-white px-[20.11px] py-[16px] text-[12px]/[100%] dark:bg-[#25273D]">
                   <div className="flex w-full items-center justify-between font-josefin-sans text-[#9495A5] dark:text-[#5B5E7E]">
-                    <div className="text-[12px]/[100%] tracking-[-0.25px]  sm:text-[14px]">
+                    <div className="text-[12px]/[100%] tracking-[-0.25px] sm:text-[14px]">
                       5 items left
                     </div>
                     <div className="hidden sm:block">
