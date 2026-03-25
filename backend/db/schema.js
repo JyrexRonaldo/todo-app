@@ -1,20 +1,27 @@
-const { integer, pgTable, varchar } = require("drizzle-orm/pg-core");
-
-// const usersTable = pgTable("users", {
-//   id: integer().primaryKey().generatedAlwaysAsIdentity(),
-//   name: varchar({ length: 255 }).notNull(),
-//   age: integer().notNull(),
-//   email: varchar({ length: 255 }).notNull(),
-// });
+const {
+  integer,
+  pgTable,
+  varchar,
+  uuid,
+  timestamp,
+  text,
+  boolean,
+} = require("drizzle-orm/pg-core");
 
 const usersTable = pgTable("users", {
-  id: integer().primaryKey().generatedAlwaysAsIdentity(),
-  title: varchar({ length: 255 }).notNull(),
+  id: uuid().primaryKey(),
+  email: varchar({ length: 255 }).notNull(),
+  passwordHash: varchar("password_hash", { length: 255 }).notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
 });
 
 const todosTable = pgTable("todos", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
-  title: varchar({ length: 255 }).notNull(),
+  userId: uuid("user_id"),
+  text: text().notNull(),
+  completed: boolean().default(false),
+  position: integer().notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
 });
 
-module.exports = { todosTable };
+module.exports = { todosTable, usersTable };

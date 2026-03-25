@@ -7,12 +7,18 @@ const getTodos = async (req, res) => {
 };
 
 const createTodos = async (req, res) => {
-  const { title } = req.body;
-  const data = await db.insert(todosTable).values({ title }).returning();
+  const { userId, text, position } = req.body;
+  if (text.trim() === "") {
+    return;
+  }
+  const data = await db
+    .insert(todosTable)
+    .values({ userId, text, position })
+    .returning();
   res.json(data);
 };
 
 module.exports = {
   getTodos,
-  createTodos
+  createTodos,
 };

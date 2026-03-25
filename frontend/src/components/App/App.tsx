@@ -9,22 +9,25 @@ function App() {
   const [bgDesktopImgUrl, setBgDesktopImgUrl] = useState(
     "/bg-desktop-light.jpg",
   );
-  const [todoTitle, setTodoTitle] = useState("");
+  const [todoText, setTodoText] = useState("");
   const [allTodos, setAllTodos] = useState<
     Array<{
       id: number;
-      title: string;
+      text: string;
     }>
   >([]);
 
   function handleTodoInput(
     e: React.ChangeEvent<HTMLInputElement, HTMLInputElement>,
   ) {
-    setTodoTitle(e.target.value);
+    setTodoText(e.target.value);
   }
 
   async function handleAddTodo(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key === "Enter") {
+      if (todoText.trim() === "") {
+        return;
+      }
       try {
         const response = await fetch(
           `${import.meta.env.VITE_HOME_DOMAIN}/api/todos`,
@@ -35,14 +38,16 @@ function App() {
               // Authorization: `${localStorage.getItem('userToken')}`,
             },
             body: JSON.stringify({
-              title: `${todoTitle}`,
+              userId: `${self.crypto.randomUUID()}`,
+              text: `${todoText}`,
+              position: Math.floor(Math.random() * 10000000),
             }),
           },
         );
 
         const data: Array<{
           id: number;
-          title: string;
+          text: string;
         }> = await response.json();
         // if (allTodos !== null) {
         console.log(data, "line 45");
@@ -51,7 +56,7 @@ function App() {
       } catch (error) {
         console.log(error);
       }
-      setTodoTitle("");
+      setTodoText("");
     }
   }
 
@@ -95,7 +100,7 @@ function App() {
 
         const data: Array<{
           id: number;
-          title: string;
+          text: string;
         }> = await response.json();
 
         setAllTodos(data);
@@ -107,9 +112,9 @@ function App() {
   }, []);
 
   const todoElements = allTodos.map(
-    (element: { id: number; title: string }) => {
-      const title = element.title;
-      return <TodoItem key={self.crypto.randomUUID()} taskName={title} />;
+    (element: { id: number; text: string }) => {
+      const text = element.text;
+      return <TodoItem key={self.crypto.randomUUID()} taskName={text} />;
     },
   );
 
@@ -147,7 +152,7 @@ function App() {
                   id=""
                   onKeyUp={handleAddTodo}
                   onChange={handleTodoInput}
-                  value={todoTitle}
+                  value={todoText}
                   className="w-full font-josefin-sans text-[12px]/[100%] outline-none sm:text-[18px]/[100%]"
                 />
               </div>
