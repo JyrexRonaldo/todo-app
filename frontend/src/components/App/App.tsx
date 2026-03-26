@@ -1,7 +1,5 @@
 import { useState, useEffect } from "react";
-import TodoList from "../TodoList/TodoList";
-import Login from "../Login/Login";
-import Signup from "../Signup/Signup";
+import { Outlet, Link, useLocation } from "react-router";
 
 function App() {
   const [mode, setMode] = useState("light");
@@ -10,6 +8,8 @@ function App() {
   const [bgDesktopImgUrl, setBgDesktopImgUrl] = useState(
     "/bg-desktop-light.jpg",
   );
+
+  const location = useLocation();
 
   function handleDarkModeToggle() {
     if (mode === "light") {
@@ -53,16 +53,25 @@ function App() {
           <div className="mx-auto mt-[48px] flex max-w-[540px] flex-col gap-[40px] px-[20px]">
             <div className="flex items-center justify-between">
               <p className="text-[30px] tracking-[0.4em] text-white">TODO</p>
-              <img
-                onClick={handleDarkModeToggle}
-                src={`${iconImgUrl}`}
-                alt=""
-                className="transition duration-150 active:rotate-360"
-              />
+              <div className="flex items-center gap-3">
+                {location.pathname === "/login" ||
+                location.pathname === "/signup" ? null : (
+                  <Link
+                    to="/login"
+                    className="font-josefin-sans text-[12px]/[100%] text-white"
+                  >
+                    Logout
+                  </Link>
+                )}
+                <img
+                  onClick={handleDarkModeToggle}
+                  src={`${iconImgUrl}`}
+                  alt=""
+                  className="transition duration-150 active:rotate-360"
+                />
+              </div>
             </div>
-            <TodoList />
-            <Login />
-            <Signup />
+            <Outlet />
           </div>
         </div>
       </div>
