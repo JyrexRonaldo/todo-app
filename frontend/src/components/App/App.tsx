@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import TodoList from "../TodoList/TodoList";
+import Login from "../Login/Login";
+import Signup from "../Signup/Signup";
 
 function App() {
   const [mode, setMode] = useState("light");
@@ -59,6 +61,8 @@ function App() {
               />
             </div>
             <TodoList />
+            <Login />
+            <Signup />
           </div>
         </div>
       </div>
