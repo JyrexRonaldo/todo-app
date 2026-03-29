@@ -9,9 +9,9 @@ const {
 } = require("drizzle-orm/pg-core");
 
 const usersTable = pgTable("users", {
-  id: uuid().primaryKey(),
-  email: varchar({ length: 255 }).notNull(),
-  passwordHash: varchar("password_hash", { length: 255 }).notNull(),
+  id: uuid().primaryKey().defaultRandom(),
+  email: varchar({ length: 255 }).unique().notNull(),
+  passwordHash: text("password_hash").notNull(),
   createdAt: timestamp("created_at").defaultNow(),
 });
 
@@ -24,4 +24,7 @@ const todosTable = pgTable("todos", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
-module.exports = { todosTable, usersTable };
+module.exports = {
+  todosTable,
+  usersTable,
+};

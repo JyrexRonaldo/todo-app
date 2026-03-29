@@ -1,6 +1,96 @@
 import { Link } from "react-router";
+import { useState } from "react";
 
 function Signup() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  let passwordVerification = null;
+
+  async function handleSignUpButton(
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) {
+    e.preventDefault();
+    if (email === "" || password === "" || confirmPassword === "") {
+      setErrorMessage("Various fields cannot be empty");
+      return;
+    }
+    if (password !== confirmPassword) {
+      return;
+    }
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_HOME_DOMAIN}/auth/signup`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email, password }),
+        },
+      );
+
+      console.log(response)
+
+      
+      const data = await response.json();
+
+      if (response.status === 500) {
+        setErrorMessage(data.message)
+      }
+      
+      console.log(data);
+      localStorage.setItem("userToken", `${data.token}`);
+      localStorage.setItem("userId", `${data.userId}`);
+      if (response.ok) {
+        setErrorMessage("");
+        // setSuccessMessage(data.message);
+        setTimeout(() => {
+          // navigate("/explore");
+        }, 250);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  function handleEmailInput(
+    e: React.ChangeEvent<HTMLInputElement, HTMLInputElement>,
+  ) {
+    setEmail(e.target.value);
+    if (email !== "" || password !== "" || confirmPassword !== "") {
+      setErrorMessage("");
+      return;
+    }
+  }
+
+  function handlePasswordInput(
+    e: React.ChangeEvent<HTMLInputElement, HTMLInputElement>,
+  ) {
+    setPassword(e.target.value);
+    if (email !== "" || password !== "" || confirmPassword !== "") {
+      setErrorMessage("");
+      return;
+    }
+  }
+
+  function handleConfirmPasswordInput(
+    e: React.ChangeEvent<HTMLInputElement, HTMLInputElement>,
+  ) {
+    setConfirmPassword(e.target.value);
+    if (email !== "" || password !== "" || confirmPassword !== "") {
+      setErrorMessage("");
+      return;
+    }
+  }
+
+  if (password != confirmPassword) {
+    passwordVerification = "Password do not match!";
+  } else {
+    passwordVerification = null;
+  }
+
   return (
     <form className="flex flex-col gap-3 rounded-[5px] bg-white p-7 font-josefin-sans drop-shadow-2xl dark:bg-[#25273D] dark:text-[#E3E4F1]">
       <div className="flex flex-col gap-2">
@@ -13,6 +103,8 @@ function Signup() {
           placeholder="Enter your email"
           className="rounded-[5px] border border-[#C8CBE7] p-[8px] dark:border-[#393A4B] dark:bg-[#171823]"
           id="email"
+          value={email}
+          onChange={handleEmailInput}
         />
       </div>
       <div className="flex flex-col gap-2">
@@ -26,6 +118,8 @@ function Signup() {
           className="rounded-[5px] border border-[#C8CBE7] p-[8px] dark:border-[#393A4B] dark:bg-[#171823]"
           id="password"
           autoComplete="true"
+          value={password}
+          onChange={handlePasswordInput}
         />
       </div>
       <div className="flex flex-col gap-2">
@@ -39,9 +133,16 @@ function Signup() {
           className="rounded-[5px] border border-[#C8CBE7] p-[8px] dark:border-[#393A4B] dark:bg-[#171823]"
           id="confirm-password"
           autoComplete="true"
+          value={confirmPassword}
+          onChange={handleConfirmPasswordInput}
         />
+        <p className="text-sm text-red-400">{passwordVerification}</p>
+        <p className="text-sm text-red-400">{errorMessage}</p>
       </div>
-      <button className="cursor-pointer rounded-[5px] bg-[#3A7CFD] p-[10px] text-white transition duration-300 hover:bg-blue-600 active:scale-105 dark:bg-blue-600 dark:hover:bg-[#3A7CFD]">
+      <button
+        onClick={handleSignUpButton}
+        className="cursor-pointer rounded-[5px] bg-[#3A7CFD] p-[10px] text-white transition duration-300 hover:bg-blue-600 active:scale-105 dark:bg-blue-600 dark:hover:bg-[#3A7CFD]"
+      >
         Create New Account
       </button>
       <Link

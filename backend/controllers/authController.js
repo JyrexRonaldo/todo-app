@@ -10,31 +10,24 @@ const createUser = async (req, res, next) => {
   const { email, password } = req.body;
   const hashedPassword = await bcrypt.hash(password, 10);
 
-//   await prisma.user.create({
-//     data: {
-//       name,
-//       username,
-//       email,
-//       password: hashedPassword,
-//     },
-//   });
-
   await db.insert(usersTable).values({ email, passwordHash: hashedPassword });
 
-  // res.json("Registration successful! You can now login.");
-  next();
+  res.json("Registration successful! You can now login.");
 };
 
 const handleSignIn = async (req, res) => {
   const { email, password } = req.body;
 
-//   const user = await prisma.user.findUnique({
-//     where: {
-//       email,
-//     },
-//   });
+  //   const user = await prisma.user.findUnique({
+  //     where: {
+  //       email,
+  //     },
+  //   });
 
-  const user = await db.select().from(usersTable).where(eq(usersTable.email, email))
+  const user = await db
+    .select()
+    .from(usersTable)
+    .where(eq(usersTable.email, email));
 
   if (!user) {
     return res.status(404).json({ message: "User not found" });
@@ -52,12 +45,12 @@ const handleSignIn = async (req, res) => {
     { expiresIn: "14d" },
   );
 
-//   let message = null;
-//   if (req.body.name) {
-//     message = "Registration successful!, logging you in";
-//   } else {
-//     message = "Welcome, logging you in";
-//   }
+  //   let message = null;
+  //   if (req.body.name) {
+  //     message = "Registration successful!, logging you in";
+  //   } else {
+  //     message = "Welcome, logging you in";
+  //   }
 
   return res.status(200).json({
     // message: message,
