@@ -32,8 +32,19 @@ const deleteTodoById = async (req, res) => {
   res.status(200).json(deletedTodo);
 };
 
+const completeTodo = async (req, res) => {
+  const { id } = req.params;
+  const { completeStatus } = req.body;
+  await db
+    .update(todosTable)
+    .set({ completed: completeStatus })
+    .where(eq(todosTable.id, id));
+  res.status(200).json({ message: "Todo updated" });
+};
+
 module.exports = {
   createTodos,
   getTodosByUserId,
   deleteTodoById,
+  completeTodo,
 };
