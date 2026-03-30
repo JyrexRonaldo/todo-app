@@ -8,6 +8,7 @@ function TodoList() {
     Array<{
       id: number;
       text: string;
+      completed: boolean;
     }>
   >([]);
 
@@ -27,6 +28,7 @@ function TodoList() {
         const data: Array<{
           id: number;
           text: string;
+          completed: boolean;
         }> = await response.json();
 
         setAllTodos(data);
@@ -55,7 +57,7 @@ function TodoList() {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
-              // Authorization: `${localStorage.getItem('userToken')}`,
+              Authorization: `${localStorage.getItem("userToken")}`,
             },
             body: JSON.stringify({
               userId: `${localStorage.getItem("userId")}`,
@@ -68,11 +70,9 @@ function TodoList() {
         const data: Array<{
           id: number;
           text: string;
+          completed: boolean;
         }> = await response.json();
-        // if (allTodos !== null) {
-        // console.log(data, "line 45");
         setAllTodos([...allTodos, ...data]);
-        // }
       } catch (error) {
         console.log(error);
       }
@@ -95,7 +95,6 @@ function TodoList() {
       );
 
       const responseData = await response.json();
-      console.log(responseData);
       const remainingTodos = allTodos.filter(
         (element) => element.id !== responseData[0].id,
       );
@@ -105,16 +104,25 @@ function TodoList() {
     }
   }
 
-  const todoElements = allTodos.map((element: { id: number; text: string }) => {
-    return (
-      <TodoItem
-        key={element.id}
-        taskName={element.text}
-        todoId={element.id}
-        deleteHandler={handleDeleteTodo}
-      />
-    );
-  });
+  // async function handleTodoStatus() {
+
+  // }
+
+  console.log(allTodos);
+
+  const todoElements = allTodos.map(
+    (element: { id: number; text: string; completed: boolean }) => {
+      return (
+        <TodoItem
+          key={element.id}
+          taskName={element.text}
+          todoId={element.id}
+          deleteHandler={handleDeleteTodo}
+          status={element.completed}
+        />
+      );
+    },
+  );
 
   return (
     <>
