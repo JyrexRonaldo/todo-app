@@ -3,9 +3,12 @@ const db = require("../config/drizzle");
 const { todosTable, usersTable } = require("../db/schema");
 
 const getTodosByUserId = async (req, res) => {
-  const {userId} = req.query;
-  const result = await db.select().from(todosTable).where(eq(userId, todosTable.userId));
-  res.json(result)
+  const { userId } = req.query;
+  const result = await db
+    .select()
+    .from(todosTable)
+    .where(eq(userId, todosTable.userId));
+  res.json(result);
 };
 
 const createTodos = async (req, res) => {
@@ -20,7 +23,17 @@ const createTodos = async (req, res) => {
   res.json(data);
 };
 
+const deleteTodoById = async (req, res) => {
+  const { id } = req.params;
+  const deletedTodo = await db
+    .delete(todosTable)
+    .where(eq(todosTable.id, id))
+    .returning();
+  res.status(200).json(deletedTodo);
+};
+
 module.exports = {
   createTodos,
   getTodosByUserId,
+  deleteTodoById,
 };

@@ -1,8 +1,11 @@
 type TodoItemProps = {
   taskName: string;
+  todoId: number
+  deleteHandler: (todoId: number) => Promise<void>
 };
 
-function TodoItem({ taskName }: TodoItemProps) {
+function TodoItem({ taskName, todoId, deleteHandler }: TodoItemProps) {
+
   return (
     <div className="group flex h-[48px] items-center px-[20.11px] py-[16px] first:rounded-t-[5px]">
       <div className="flex w-full items-center gap-[16px]">
@@ -15,7 +18,7 @@ function TodoItem({ taskName }: TodoItemProps) {
         <p className="w-[220px] flex-1 truncate font-josefin-sans text-[12px]/[100%] tracking-[-0.25px] text-[#494C6B] sm:text-[18px]/[100%] dark:text-[#E3E4F1]">
           {taskName}
         </p>
-        <button className="invisible group-hover:visible">
+        <button className="opacity-0 group-hover:opacity-100" onClick={() => {deleteHandler(todoId)}}>
           <img src="/icon-cross.svg" alt="" />
         </button>
       </div>

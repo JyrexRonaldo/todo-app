@@ -11,8 +11,6 @@ function TodoList() {
     }>
   >([]);
 
-  console.log(localStorage.getItem("userId"));
-
   useEffect(() => {
     async function fetchData() {
       try {
@@ -30,8 +28,6 @@ function TodoList() {
           id: number;
           text: string;
         }> = await response.json();
-
-        console.log(data);
 
         setAllTodos(data);
       } catch (error) {
@@ -74,7 +70,7 @@ function TodoList() {
           text: string;
         }> = await response.json();
         // if (allTodos !== null) {
-        console.log(data, "line 45");
+        // console.log(data, "line 45");
         setAllTodos([...allTodos, ...data]);
         // }
       } catch (error) {
@@ -84,8 +80,40 @@ function TodoList() {
     }
   }
 
+  async function handleDeleteTodo(todoId: number) {
+    console.log("clicked");
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_HOME_DOMAIN}/api/todos/${todoId}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `${localStorage.getItem("userToken")}`,
+          },
+        },
+      );
+
+      const responseData = await response.json();
+      console.log(responseData);
+      const remainingTodos = allTodos.filter(
+        (element) => element.id !== responseData[0].id,
+      );
+      setAllTodos([...remainingTodos]);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   const todoElements = allTodos.map((element: { id: number; text: string }) => {
-    return <TodoItem key={element.id} taskName={element.text} />;
+    return (
+      <TodoItem
+        key={element.id}
+        taskName={element.text}
+        todoId={element.id}
+        deleteHandler={handleDeleteTodo}
+      />
+    );
   });
 
   return (
@@ -118,7 +146,7 @@ function TodoList() {
           <div className="flex h-[48px] items-center rounded-b-[5px] bg-white px-[20.11px] py-[16px] text-[12px]/[100%] dark:bg-[#25273D]">
             <div className="flex w-full items-center justify-between font-josefin-sans text-[#9495A5] dark:text-[#5B5E7E]">
               <div className="text-[12px]/[100%] tracking-[-0.25px] sm:text-[14px]">
-                5 items left
+                {allTodos.length} items left
               </div>
               <div className="hidden sm:block">
                 <TabBar />
