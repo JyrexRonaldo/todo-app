@@ -1,15 +1,30 @@
 import { useState } from "react";
+import { useSortable } from "@dnd-kit/react/sortable";
 
 type TodoItemProps = {
   taskName: string;
   todoId: number;
   deleteHandler: (todoId: number) => Promise<void>;
   status: boolean;
+  id: number;
+  index: number;
 };
 
-function TodoItem({ taskName, todoId, deleteHandler, status }: TodoItemProps) {
+function TodoItem({
+  taskName,
+  todoId,
+  deleteHandler,
+  status,
+  id,
+  index,
+}: TodoItemProps) {
   const [completeStatus, setCompleteStatus] = useState(status);
-  
+
+  const { ref, isDropping } = useSortable({ id, index });
+
+  if (isDropping) {
+    console.log({ taskName, index });
+  }
 
   async function handleInput() {
     try {
@@ -26,7 +41,7 @@ function TodoItem({ taskName, todoId, deleteHandler, status }: TodoItemProps) {
           }),
         },
       );
-      
+
       const data = await response.json();
       console.log(data);
       setCompleteStatus(!completeStatus);
@@ -36,7 +51,13 @@ function TodoItem({ taskName, todoId, deleteHandler, status }: TodoItemProps) {
   }
 
   return (
-    <div className="group flex h-[48px] items-center px-[20.11px] py-[16px] first:rounded-t-[5px]">
+    <div
+      ref={ref}
+      className="group flex h-[48px] items-center px-[20.11px] py-[16px] first:rounded-t-[5px]"
+      onDragEnd={() => {
+        console.log("hhhaaaaaiiiaaaa");
+      }}
+    >
       <div className="flex w-full items-center gap-[16px]">
         <input
           className="custom-hover relative h-[20px] w-[20px] appearance-none rounded-[50%] border border-[#979797] align-[-2px] text-white before:invisible before:absolute before:top-[-1px] before:right-[-1px] before:block before:size-[20px] before:rounded-full before:bg-linear-135 before:from-[hsl(192,100%,67%)] before:to-[hsl(280,87%,65%)] after:invisible after:absolute after:top-[-1px] after:left-[3.5px] after:block after:text-[13px] after:content-['✓'] checked:before:visible checked:after:visible dark:border-[#393A4B]"

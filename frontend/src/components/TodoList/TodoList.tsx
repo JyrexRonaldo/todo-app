@@ -1,6 +1,8 @@
 import TabBar from "../TabBar/TabBar";
 import { useState, useEffect } from "react";
 import TodoItem from "../TodoItem/TodoItem";
+import { DragDropProvider } from "@dnd-kit/react";
+import { isSortable } from "@dnd-kit/react/sortable";
 
 function TodoList() {
   const [todoText, setTodoText] = useState("");
@@ -105,7 +107,7 @@ function TodoList() {
   }
 
   const todoElements = allTodos.map(
-    (element: { id: number; text: string; completed: boolean }) => {
+    (element: { id: number; text: string; completed: boolean }, index) => {
       return (
         <TodoItem
           key={element.id}
@@ -113,6 +115,8 @@ function TodoList() {
           todoId={element.id}
           deleteHandler={handleDeleteTodo}
           status={element.completed}
+          id={element.id}
+          index={index}
         />
       );
     },
@@ -120,6 +124,26 @@ function TodoList() {
 
   return (
     <>
+     <DragDropProvider
+      onDragEnd={(event) => {
+        if (event.canceled) return;
+
+        const {source} = event.operation;
+
+        if (isSortable(source)) {
+          const {initialIndex, index} = source;
+
+          if (initialIndex !== index) {
+            setAllTodos((items) => {
+              const newItems = [...items];
+              const [removed] = newItems.splice(initialIndex, 1);
+              newItems.splice(index, 0, removed);
+              return newItems;
+            });
+          }
+        }
+      }}
+    >
       <div className="flex flex-col gap-[16px] drop-shadow-2xl">
         <div className="flex h-[48px] items-center rounded-[5px] bg-white px-[20.11px] text-[12px]/[100%] dark:bg-[#25273D] dark:text-[#9495A5]">
           <div className="mr-[16px] h-[20px] w-[20px] rounded-[50%] border border-[#979797] dark:border-[#393A4B]"></div>
@@ -166,6 +190,8 @@ function TodoList() {
       <p className="self-center font-josefin-sans text-[14px]/[100%] tracking-[-0.25px] text-[#9495A5] dark:text-[#5B5E7E]">
         Drag and drop to reorder list
       </p>
+       </DragDropProvider>
+      
     </>
   );
 }
