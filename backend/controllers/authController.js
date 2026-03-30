@@ -1,10 +1,8 @@
-// const prisma = require("../config/prisma");
 const db = require("../config/drizzle");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { usersTable } = require("../db/schema");
 const { eq } = require("drizzle-orm");
-// const asyncHandler = require("express-async-handler");
 
 const createUser = async (req, res, next) => {
   const { email, password } = req.body;
@@ -12,7 +10,8 @@ const createUser = async (req, res, next) => {
 
   await db.insert(usersTable).values({ email, passwordHash: hashedPassword });
 
-  res.json("Registration successful! You can now login.");
+  // res.json("Registration successful! You can now login.");
+  next()
 };
 
 const handleSignIn = async (req, res) => {
@@ -47,7 +46,6 @@ const handleSignIn = async (req, res) => {
     }
 
   return res.status(200).json({
-    // message: message,
     token: `Bearer ${token}`,
     userId: user[0].id,
     email: user[0].email,
