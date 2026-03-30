@@ -1,5 +1,6 @@
 import { Link } from "react-router";
 import { useState } from "react";
+import { useNavigate } from "react-router";
 
 function Signup() {
   const [email, setEmail] = useState("");
@@ -7,6 +8,7 @@ function Signup() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   let passwordVerification = null;
+  const navigate = useNavigate()
 
   async function handleSignUpButton(
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
@@ -47,7 +49,7 @@ function Signup() {
         setErrorMessage("");
         // setSuccessMessage(data.message);
         setTimeout(() => {
-          // navigate("/explore");
+          navigate("/");
         }, 250);
       }
     } catch (error) {

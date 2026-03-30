@@ -1,9 +1,11 @@
+const { eq } = require("drizzle-orm");
 const db = require("../config/drizzle");
-const { todosTable } = require("../db/schema");
+const { todosTable, usersTable } = require("../db/schema");
 
-const getTodos = async (req, res) => {
-  const result = await db.select().from(todosTable);
-  res.json(result);
+const getTodosByUserId = async (req, res) => {
+  const {userId} = req.query;
+  const result = await db.select().from(todosTable).where(eq(userId, todosTable.userId));
+  res.json(result)
 };
 
 const createTodos = async (req, res) => {
@@ -19,6 +21,6 @@ const createTodos = async (req, res) => {
 };
 
 module.exports = {
-  getTodos,
   createTodos,
+  getTodosByUserId,
 };

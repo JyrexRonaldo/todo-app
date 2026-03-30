@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Outlet, Link, useLocation } from "react-router";
+import { Outlet, Link, useLocation, useNavigate } from "react-router";
 
 function App() {
   const [mode, setMode] = useState("light");
@@ -8,8 +8,8 @@ function App() {
   const [bgDesktopImgUrl, setBgDesktopImgUrl] = useState(
     "/bg-desktop-light.jpg",
   );
-
   const location = useLocation();
+  const navigate = useNavigate();
 
   function handleDarkModeToggle() {
     if (mode === "light") {
@@ -23,6 +23,11 @@ function App() {
       setBgImgUrl("/bg-mobile-light.jpg");
       setBgDesktopImgUrl("/bg-desktop-light.jpg");
     }
+  }
+
+  function handleLogout() {
+    localStorage.clear();
+    navigate("/login");
   }
 
   useEffect(() => {
@@ -56,12 +61,12 @@ function App() {
               <div className="flex items-center gap-3">
                 {location.pathname === "/login" ||
                 location.pathname === "/signup" ? null : (
-                  <Link
-                    to="/login"
+                  <button
                     className="font-josefin-sans text-[12px]/[100%] text-white"
+                    onClick={handleLogout}
                   >
                     Logout
-                  </Link>
+                  </button>
                 )}
                 <img
                   onClick={handleDarkModeToggle}

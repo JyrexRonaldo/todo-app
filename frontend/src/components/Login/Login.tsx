@@ -1,10 +1,11 @@
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useState } from "react";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate()
 
   function handleEmailInput(
     e: React.ChangeEvent<HTMLInputElement, HTMLInputElement>,
@@ -63,9 +64,9 @@ function Login() {
       if (response.ok) {
         // setSuccessMessage(data.message);
         setErrorMessage("");
-        // setTimeout(() => {
-          // navigate("/explore");
-        // }, 250);
+        setTimeout(() => {
+          navigate("/");
+        }, 250);
       }
     } catch (error) {
       console.log(error);

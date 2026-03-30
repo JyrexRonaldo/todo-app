@@ -11,11 +11,13 @@ function TodoList() {
     }>
   >([]);
 
+  console.log(localStorage.getItem("userId"));
+
   useEffect(() => {
     async function fetchData() {
       try {
         const response = await fetch(
-          `${import.meta.env.VITE_HOME_DOMAIN}/api/todos`,
+          `${import.meta.env.VITE_HOME_DOMAIN}/api/todos?userId=${localStorage.getItem("userId")}`,
           {
             method: "GET",
             headers: {
@@ -28,6 +30,8 @@ function TodoList() {
           id: number;
           text: string;
         }> = await response.json();
+
+        console.log(data);
 
         setAllTodos(data);
       } catch (error) {
@@ -58,7 +62,7 @@ function TodoList() {
               // Authorization: `${localStorage.getItem('userToken')}`,
             },
             body: JSON.stringify({
-              userId: `${self.crypto.randomUUID()}`,
+              userId: `${localStorage.getItem("userId")}`,
               text: `${todoText}`,
               position: Math.floor(Math.random() * 10000000),
             }),
@@ -81,8 +85,7 @@ function TodoList() {
   }
 
   const todoElements = allTodos.map((element: { id: number; text: string }) => {
-    const text = element.text;
-    return <TodoItem key={self.crypto.randomUUID()} taskName={text} />;
+    return <TodoItem key={element.id} taskName={element.text} />;
   });
 
   return (
