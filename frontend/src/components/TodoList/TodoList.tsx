@@ -104,12 +104,6 @@ function TodoList() {
     }
   }
 
-  // async function handleTodoStatus() {
-
-  // }
-
-  console.log(allTodos);
-
   const todoElements = allTodos.map(
     (element: { id: number; text: string; completed: boolean }) => {
       return (

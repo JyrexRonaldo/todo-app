@@ -1,27 +1,22 @@
 import { useState, useEffect } from "react";
-import { Outlet, Link, useLocation, useNavigate } from "react-router";
+import { Outlet, useLocation, useNavigate } from "react-router";
 
 function App() {
-  const [mode, setMode] = useState("light");
-  const [iconImgUrl, setIconImgUrl] = useState("/icon-moon.svg");
-  const [bgImgUrl, setBgImgUrl] = useState("/bg-mobile-light.jpg");
-  const [bgDesktopImgUrl, setBgDesktopImgUrl] = useState(
-    "/bg-desktop-light.jpg",
-  );
+  const [mode, setMode] = useState(localStorage.getItem("theme") || "light");
+  let iconImgUrl = "";
+  let bgImgUrl = "";
+  let bgDesktopImgUrl = "";
+
   const location = useLocation();
   const navigate = useNavigate();
 
   function handleDarkModeToggle() {
     if (mode === "light") {
+      localStorage.setItem("theme", "dark");
       setMode("dark");
-      setIconImgUrl("/icon-sun.svg");
-      setBgImgUrl("/bg-mobile-dark.jpg");
-      setBgDesktopImgUrl("/bg-desktop-dark.jpg");
     } else {
+      localStorage.setItem("theme", "light");
       setMode("light");
-      setIconImgUrl("/icon-moon.svg");
-      setBgImgUrl("/bg-mobile-light.jpg");
-      setBgDesktopImgUrl("/bg-desktop-light.jpg");
     }
   }
 
@@ -40,6 +35,16 @@ function App() {
       document.body.classList.remove("your-class-name");
     };
   }, [mode]);
+
+  if (mode === "light") {
+    iconImgUrl = "/icon-moon.svg";
+    bgImgUrl = "/bg-mobile-light.jpg";
+    bgDesktopImgUrl = "/bg-desktop-light.jpg";
+  } else {
+    iconImgUrl = "/icon-sun.svg";
+    bgImgUrl = "/bg-mobile-dark.jpg";
+    bgDesktopImgUrl = "/bg-desktop-dark.jpg";
+  }
 
   return (
     <>
