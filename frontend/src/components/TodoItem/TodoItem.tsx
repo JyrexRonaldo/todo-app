@@ -20,11 +20,7 @@ function TodoItem({
 }: TodoItemProps) {
   const [completeStatus, setCompleteStatus] = useState(status);
 
-  const { ref, isDropping } = useSortable({ id, index });
-
-  if (isDropping) {
-    console.log({ taskName, index });
-  }
+  const { ref } = useSortable({ id, index });
 
   async function handleInput() {
     try {

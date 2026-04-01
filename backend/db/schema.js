@@ -17,7 +17,7 @@ const usersTable = pgTable("users", {
 
 const todosTable = pgTable("todos", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
-  userId: uuid("user_id"),
+  userId: uuid("user_id").references(() => usersTable.id, { onDelete: 'cascade' }),
   text: text().notNull(),
   completed: boolean().default(false),
   position: integer().notNull(),

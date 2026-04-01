@@ -1,4 +1,4 @@
-const { eq } = require("drizzle-orm");
+const { eq, inArray, sql } = require("drizzle-orm");
 const db = require("../config/drizzle");
 const { todosTable, usersTable } = require("../db/schema");
 
@@ -36,10 +36,37 @@ const completeTodo = async (req, res) => {
   const { id } = req.params;
   const { completeStatus } = req.body;
   const todoItem = await db
-  .update(todosTable)
-  .set({ completed: completeStatus })
-    .where(eq(todosTable.id, id)).returning();
-  res.status(200).json({ message: "Todo updated", todo: todoItem});
+    .update(todosTable)
+    .set({ completed: completeStatus })
+    .where(eq(todosTable.id, id))
+    .returning();
+  res.status(200).json({ message: "Todo updated", todo: todoItem });
+};
+
+const updatePositions = async (req, res) => {
+  const { positions } = req.body;
+
+  if (positions.length === 0) {
+    return;
+  }
+
+  const sqlChunks = [];
+  const ids = [];
+  sqlChunks.push(sql`(case`);
+  for (const input of positions) {
+    sqlChunks.push(
+      sql`when ${todosTable.id} = ${input.todoId} then cast(${input.position} as int)`,
+    );
+    ids.push(input.todoId);
+  }
+  sqlChunks.push(sql`end)`);
+  const finalSql = sql.join(sqlChunks, sql.raw(" "));
+  await db
+    .update(todosTable)
+    .set({ position: finalSql })
+    .where(inArray(todosTable.id, ids));
+
+  res.status(200).json({ message: "passed" });
 };
 
 module.exports = {
@@ -47,4 +74,5 @@ module.exports = {
   getTodosByUserId,
   deleteTodoById,
   completeTodo,
+  updatePositions,
 };
