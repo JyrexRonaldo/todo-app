@@ -76,7 +76,6 @@ function TodoList() {
   }
 
   async function handleDeleteTodo(todoId: number) {
-    console.log("clicked");
     try {
       const response = await fetch(
         `${import.meta.env.VITE_HOME_DOMAIN}/api/todos/${todoId}`,
@@ -93,7 +92,9 @@ function TodoList() {
       const remainingTodos = allTodos.filter(
         (element) => element.id !== responseData[0].id,
       );
+      remainingTodos.forEach((element, index) => (element.position = index));
       setAllTodos([...remainingTodos]);
+      updateItemPosition();
     } catch (error) {
       console.log(error);
     }
@@ -119,8 +120,7 @@ function TodoList() {
         },
       );
 
-      const data = await response.json();
-      console.log(data);
+      await response.json();
     } catch (error) {
       console.log(error);
     }
