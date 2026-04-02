@@ -24,22 +24,20 @@ function TodoItem({
 
   async function handleInput() {
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_HOME_DOMAIN}/api/todos/${todoId}`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `${localStorage.getItem("userToken")}`,
-          },
-          body: JSON.stringify({
-            completeStatus: !completeStatus,
-          }),
+      // const response =
+      await fetch(`${import.meta.env.VITE_HOME_DOMAIN}/api/todos/${todoId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `${localStorage.getItem("userToken")}`,
         },
-      );
+        body: JSON.stringify({
+          completeStatus: !completeStatus,
+        }),
+      });
 
-      const data = await response.json();
-      console.log(data);
+      // const data = await response.json();
+      // console.log(data);
       setCompleteStatus(!completeStatus);
     } catch (error) {
       console.log(error);
@@ -50,9 +48,6 @@ function TodoItem({
     <div
       ref={ref}
       className="group flex h-[48px] items-center px-[20.11px] py-[16px] first:rounded-t-[5px]"
-      onDragEnd={() => {
-        console.log("hhhaaaaaiiiaaaa");
-      }}
     >
       <div className="flex w-full items-center gap-[16px]">
         <input

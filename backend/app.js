@@ -17,8 +17,8 @@ const limiter = rateLimit({
   // store: ... , // Redis, Memcached, etc. See below.
 });
 
-app.use(limiter);
 app.use(cors());
+app.use(limiter);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
