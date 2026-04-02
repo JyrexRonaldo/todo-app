@@ -24,6 +24,7 @@ function TodoList() {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
+              Authorization: `${localStorage.getItem('userToken')}`,
             },
           },
         );

@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const app = express();
+const passport = require("./config/passport");
 const PORT = process.env.PORT || 3000;
 const rateLimit = require("express-rate-limit");
 const todoRouter = require("./routes/todoRouter");
@@ -22,6 +23,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/auth", authRouter);
+app.use(passport.authenticate("jwt", { session: false }));
 app.get("/", (req, res) => {
   res.json("Hello World!");
 });
