@@ -3,40 +3,59 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { usersTable } = require("../db/schema");
 const { eq } = require("drizzle-orm");
+const { body, validationResult, matchedData } = require("express-validator");
 
-const createUser = async (req, res, next) => {
-  const { email, password } = req.body;
-  const hashedPassword = await bcrypt.hash(password, 10);
+const validateUser = [
+  body("email").trim().isEmail().withMessage("Invalid email address"),
+  body("password")
+    .isLength({ min: 5 })
+    .withMessage("Password must be at least 5 characters long"),
+];
 
-  await db.insert(usersTable).values({ email, passwordHash: hashedPassword });
+const createUser = [
+  validateUser,
+  async (req, res, next) => {
+    const result = validationResult(req);
+    if (!result.isEmpty()) {
+      console.log(result.errors.map((error) => error.msg));
+      return res.status(400).json(result.errors.map((error) => error.msg));
+    }
 
-  // res.json("Registration successful! You can now login.");
-  next()
-};
-
-const handleSignIn = async (req, res) => {
     const { email, password } = req.body;
-    
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    await db.insert(usersTable).values({ email, passwordHash: hashedPassword });
+
+    // res.json("Registration successful! You can now login.");
+    next();
+  },
+];
+
+const handleSignIn = [
+  validateUser,
+  async (req, res) => {
+    const { email, password } = req.body;
+
     const user = await db
-    .select()
-    .from(usersTable)
-    .where(eq(usersTable.email, email));
-    
-  if (!user[0]) {
-    return res.status(404).json({ message: "User not found" });
-  }
+      .select()
+      .from(usersTable)
+      .where(eq(usersTable.email, email));
 
-  const match = await bcrypt.compare(password, user[0].passwordHash);
+    if (!user[0]) {
+      return res.status(404).json({ message: "User not found" });
+    }
 
-  if (!match) {
-    return res.status(401).json({ message: "Invalid password" });
-  }
+    const match = await bcrypt.compare(password, user[0].passwordHash);
 
-  const token = jwt.sign(
-    { id: user.id, email: user.email },
-    process.env.JWT_SECRET_KEY,
-    { expiresIn: "14d" },
-  );
+    if (!match) {
+      return res.status(401).json({ message: "Invalid password" });
+    }
+
+    const token = jwt.sign(
+      { id: user.id, email: user.email },
+      process.env.JWT_SECRET_KEY,
+      { expiresIn: "14d" },
+    );
 
     let message = null;
     if (req.body.name) {
@@ -45,11 +64,12 @@ const handleSignIn = async (req, res) => {
       message = "Welcome, logging you in";
     }
 
-  return res.status(200).json({
-    token: `Bearer ${token}`,
-    userId: user[0].id,
-    email: user[0].email,
-  });
-};
+    return res.status(200).json({
+      token: `Bearer ${token}`,
+      userId: user[0].id,
+      email: user[0].email,
+    });
+  },
+];
 
 module.exports = { createUser, handleSignIn };

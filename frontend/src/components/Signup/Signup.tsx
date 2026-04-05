@@ -2,25 +2,28 @@ import { Link } from "react-router";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 
+type BackendErrorsType = string[] | null;
+
 function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [backendErrors, setBackendErrors] = useState<BackendErrorsType>(null);
   let passwordVerification = null;
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   async function handleSignUpButton(
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) {
     e.preventDefault();
-    if (email === "" || password === "" || confirmPassword === "") {
-      setErrorMessage("Various fields cannot be empty");
-      return;
-    }
-    if (password !== confirmPassword) {
-      return;
-    }
+    // if (email === "" || password === "" || confirmPassword === "") {
+    //   setErrorMessage("Various fields cannot be empty");
+    //   return;
+    // }
+    // if (password !== confirmPassword) {
+    //   return;
+    // }
     try {
       const response = await fetch(
         `${import.meta.env.VITE_HOME_DOMAIN}/auth/signup`,
@@ -32,22 +35,20 @@ function Signup() {
           body: JSON.stringify({ email, password }),
         },
       );
-
-      console.log(response)
-
-      
       const data = await response.json();
 
-      if (response.status === 500) {
-        setErrorMessage(data.message)
+      if (response.status === 400) {
+        setBackendErrors(data);
       }
-      
-      console.log(data);
+
+      if (response.status === 500) {
+        setErrorMessage(data.message);
+      }
+
       localStorage.setItem("userToken", `${data.token}`);
       localStorage.setItem("userId", `${data.userId}`);
       if (response.ok) {
         setErrorMessage("");
-        // setSuccessMessage(data.message);
         setTimeout(() => {
           navigate("/");
         }, 250);
@@ -92,6 +93,12 @@ function Signup() {
   } else {
     passwordVerification = null;
   }
+
+  console.log(backendErrors);
+
+  const backErr = backendErrors?.map((err, index) => (
+    <p className="text-sm text-red-400" key={index}>{err}</p>
+  ));
 
   return (
     <form className="flex flex-col gap-3 rounded-[5px] bg-white p-7 font-josefin-sans drop-shadow-2xl dark:bg-[#25273D] dark:text-[#E3E4F1]">
@@ -138,6 +145,7 @@ function Signup() {
           value={confirmPassword}
           onChange={handleConfirmPasswordInput}
         />
+        {backErr}
         <p className="text-sm text-red-400">{passwordVerification}</p>
         <p className="text-sm text-red-400">{errorMessage}</p>
       </div>

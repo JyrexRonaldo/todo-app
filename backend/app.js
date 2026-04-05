@@ -30,7 +30,7 @@ app.get("/", (req, res) => {
 app.use("/api", todoRouter);
 app.use((err, req, res, next) => {
   console.log(err)
-  if (err.cause.code === "23505") {
+  if (err.cause?.code === "23505") {
     res.status(500).send({ message: "Email already in use" });
   }
   // res.status(err.statusCode || 500).send(err.message);

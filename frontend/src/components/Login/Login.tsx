@@ -47,22 +47,12 @@ function Login() {
         },
       );
 
-      // if (response.status === 404) {
-      //   setErrorMessage("User not found");
-      // }
-
-      // if (response.status === 401) {
-      //   setErrorMessage("Invalid password");
-      // }
-
       const data = await response.json();
 
-      console.log(data)
       localStorage.setItem("userToken", `${data.token}`);
       localStorage.setItem("userId", `${data.userId}`);
 
       if (response.ok) {
-        // setSuccessMessage(data.message);
         setErrorMessage("");
         setTimeout(() => {
           navigate("/");
