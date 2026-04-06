@@ -36,16 +36,18 @@ const handleSignIn = [
   async (req, res) => {
     const { email, password } = req.body;
 
-    const user = await db
-      .select()
-      .from(usersTable)
-      .where(eq(usersTable.email, email));
+    const [user] = [
+      ...(await db
+        .select()
+        .from(usersTable)
+        .where(eq(usersTable.email, email))),
+    ];
 
-    if (!user[0]) {
+    if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    const match = await bcrypt.compare(password, user[0].passwordHash);
+    const match = await bcrypt.compare(password, user.passwordHash);
 
     if (!match) {
       return res.status(401).json({ message: "Invalid password" });
@@ -66,8 +68,8 @@ const handleSignIn = [
 
     return res.status(200).json({
       token: `Bearer ${token}`,
-      userId: user[0].id,
-      email: user[0].email,
+      userId: user.id,
+      email: user.email,
     });
   },
 ];

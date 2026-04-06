@@ -6,7 +6,8 @@ todoRouter
   .route("/todos")
   .get(todoController.getTodosByUserId)
   .post(todoController.createTodos)
-  .patch(todoController.updatePositions);
+  .patch(todoController.updatePositions)
+  .delete(todoController.deleteCompletedTodos);
 
 todoRouter
   .route("/todos/:id")

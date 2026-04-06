@@ -24,7 +24,7 @@ function TodoList() {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
-              Authorization: `${localStorage.getItem('userToken')}`,
+              Authorization: `${localStorage.getItem("userToken")}`,
             },
           },
         );
@@ -127,6 +127,27 @@ function TodoList() {
     }
   }
 
+  async function clearCompletedHandler() {
+    console.log("cleared");
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_HOME_DOMAIN}/api/todos`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `${localStorage.getItem("userToken")}`,
+          },
+        },
+      );
+
+      const data = await response.json();  
+      setAllTodos(allTodos.filter((todoItem => !data.includes(todoItem.id))))
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   const todoElements = allTodos
     .sort((a, b) => a.position - b.position)
     .map((element, index) => {
@@ -198,9 +219,12 @@ function TodoList() {
                 <div className="hidden sm:block">
                   <TabBar />
                 </div>
-                <div className="text-[12px]/[100%] tracking-[-0.25px] hover:text-[#494C6B] active:text-[#3A7CFD] sm:text-[14px] dark:hover:text-[#C8CBE7]">
+                <button
+                  onClick={clearCompletedHandler}
+                  className="text-[12px]/[100%] tracking-[-0.25px] hover:text-[#494C6B] active:text-[#3A7CFD] sm:text-[14px] dark:hover:text-[#C8CBE7]"
+                >
                   Clear Completed
-                </div>
+                </button>
               </div>
             </div>
           </div>

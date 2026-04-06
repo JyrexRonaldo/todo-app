@@ -1,4 +1,4 @@
-const { eq, inArray, sql } = require("drizzle-orm");
+const { eq, inArray, sql, and } = require("drizzle-orm");
 const db = require("../config/drizzle");
 const { todosTable, usersTable } = require("../db/schema");
 
@@ -69,10 +69,22 @@ const updatePositions = async (req, res) => {
   res.status(200).json({ message: "passed" });
 };
 
+const deleteCompletedTodos = async (req, res) => {
+  const [user] = req.user 
+  const deletedTodoIds = (await db
+    .delete(todosTable)
+    .where(
+      and(eq(todosTable.completed, true), eq(todosTable.userId, user.id)),
+    )
+    .returning()).map(todoItem => todoItem.id);
+  res.status(200).json(deletedTodoIds);
+};
+
 module.exports = {
   createTodos,
   getTodosByUserId,
   deleteTodoById,
   completeTodo,
   updatePositions,
+  deleteCompletedTodos,
 };
