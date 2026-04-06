@@ -8,6 +8,7 @@ type TodoItemProps = {
   status: boolean;
   id: number;
   index: number;
+  handleStatusInput: (completeStatus: boolean, todoId: number) => Promise<void>;
 };
 
 function TodoItem({
@@ -17,31 +18,37 @@ function TodoItem({
   status,
   id,
   index,
+  handleStatusInput,
 }: TodoItemProps) {
   const [completeStatus, setCompleteStatus] = useState(status);
 
   const { ref } = useSortable({ id, index });
 
-  async function handleInput() {
-    try {
-      // const response =
-      await fetch(`${import.meta.env.VITE_HOME_DOMAIN}/api/todos/${todoId}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `${localStorage.getItem("userToken")}`,
-        },
-        body: JSON.stringify({
-          completeStatus: !completeStatus,
-        }),
-      });
+  // async function handleInput() {
+  //   try {
+  //     const response =
+  //     await fetch(`${import.meta.env.VITE_HOME_DOMAIN}/api/todos/${todoId}`, {
+  //       method: "PATCH",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         Authorization: `${localStorage.getItem("userToken")}`,
+  //       },
+  //       body: JSON.stringify({
+  //         completeStatus: !completeStatus,
+  //       }),
+  //     });
 
-      // const data = await response.json();
-      // console.log(data);
-      setCompleteStatus(!completeStatus);
-    } catch (error) {
-      console.log(error);
-    }
+  //     const data = await response.json()
+  //     console.log(data)
+  //     setCompleteStatus(!completeStatus);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
+
+  async function handleInputControl() {
+    setCompleteStatus(!completeStatus);
+    handleStatusInput(!completeStatus, todoId)
   }
 
   return (
@@ -56,7 +63,7 @@ function TodoItem({
           name="completeStatus"
           id="completeStatus"
           checked={completeStatus}
-          onChange={handleInput}
+          onChange={handleInputControl}
         />
         <p className="w-[220px] flex-1 truncate font-josefin-sans text-[12px]/[100%] tracking-[-0.25px] text-[#494C6B] sm:text-[18px]/[100%] dark:text-[#E3E4F1]">
           {taskName}

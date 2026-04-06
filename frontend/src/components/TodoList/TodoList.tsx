@@ -14,6 +14,7 @@ type AllTodos = {
 function TodoList() {
   const [todoText, setTodoText] = useState("");
   const [allTodos, setAllTodos] = useState<AllTodos>([]);
+  const [list, setList] = useState("all");
 
   useEffect(() => {
     async function fetchData() {
@@ -141,28 +142,102 @@ function TodoList() {
         },
       );
 
-      const data = await response.json();  
-      setAllTodos(allTodos.filter((todoItem => !data.includes(todoItem.id))))
+      const data = await response.json();
+      setAllTodos(allTodos.filter((todoItem) => !data.includes(todoItem.id)));
     } catch (error) {
       console.log(error);
     }
   }
 
-  const todoElements = allTodos
-    .sort((a, b) => a.position - b.position)
-    .map((element, index) => {
-      return (
-        <TodoItem
-          key={element.id}
-          taskName={element.text}
-          todoId={element.id}
-          deleteHandler={handleDeleteTodo}
-          status={element.completed}
-          id={element.id}
-          index={index}
-        />
+  async function handleInput(completeStatus: boolean, todoId: number) {
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_HOME_DOMAIN}/api/todos/${todoId}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `${localStorage.getItem("userToken")}`,
+          },
+          body: JSON.stringify({
+            completeStatus: completeStatus,
+          }),
+        },
       );
-    });
+
+      const data = await response.json();
+      const updatedItemIndex = allTodos.findIndex(
+        (todo) => todo.id === data.todo.id,
+      );
+       allTodos.splice(updatedItemIndex, 1, data.todo)
+      // console.log(updatedItemIndex);
+      // console.log(data.todo);
+      // console.log(allTodos);
+      // setAllTodos([...allTodos, data.todo]);
+      // console.log(updatedTodoList)
+      console.log(allTodos)
+      setAllTodos([...allTodos]);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  let todoElements = null;
+
+  if (list === "all") {
+    todoElements = allTodos
+      .sort((a, b) => a.position - b.position)
+      .map((element, index) => {
+        return (
+          <TodoItem
+            key={element.id}
+            taskName={element.text}
+            todoId={element.id}
+            deleteHandler={handleDeleteTodo}
+            status={element.completed}
+            id={element.id}
+            index={index}
+            handleStatusInput={handleInput}
+          />
+        );
+      });
+  } else if (list === "active") {
+    todoElements = allTodos
+      .filter((element) => element.completed === false)
+      .sort((a, b) => a.position - b.position)
+      .map((element, index) => {
+        return (
+          <TodoItem
+            key={element.id}
+            taskName={element.text}
+            todoId={element.id}
+            deleteHandler={handleDeleteTodo}
+            status={element.completed}
+            id={element.id}
+            index={index}
+            handleStatusInput={handleInput}
+          />
+        );
+      });
+  } else if (list === "completed") {
+    todoElements = allTodos
+      .filter((element) => element.completed === true)
+      .sort((a, b) => a.position - b.position)
+      .map((element, index) => {
+        return (
+          <TodoItem
+            key={element.id}
+            taskName={element.text}
+            todoId={element.id}
+            deleteHandler={handleDeleteTodo}
+            status={element.completed}
+            id={element.id}
+            index={index}
+            handleStatusInput={handleInput}
+          />
+        );
+      });
+  }
 
   return (
     <>
@@ -217,7 +292,7 @@ function TodoList() {
                   {allTodos.length} items left
                 </div>
                 <div className="hidden sm:block">
-                  <TabBar />
+                  <TabBar list={list} setList={setList} />
                 </div>
                 <button
                   onClick={clearCompletedHandler}
@@ -229,7 +304,7 @@ function TodoList() {
             </div>
           </div>
           <div className="sm:hidden">
-            <TabBar />
+            <TabBar list={list} setList={setList} />
           </div>
         </div>
         <p className="self-center font-josefin-sans text-[14px]/[100%] tracking-[-0.25px] text-[#9495A5] dark:text-[#5B5E7E]">

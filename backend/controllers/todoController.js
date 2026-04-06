@@ -35,7 +35,7 @@ const deleteTodoById = async (req, res) => {
 const completeTodo = async (req, res) => {
   const { id } = req.params;
   const { completeStatus } = req.body;
-  const todoItem = await db
+  const [todoItem] = await db
     .update(todosTable)
     .set({ completed: completeStatus })
     .where(eq(todosTable.id, id))
