@@ -1,40 +1,21 @@
 import { Link, useNavigate } from "react-router";
-import { useState } from "react";
+import { useForm, type SubmitHandler } from "react-hook-form";
+
+type LogInFormType = {
+  email: string;
+  password: string;
+};
 
 function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
-  const navigate = useNavigate()
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LogInFormType>();
 
-  function handleEmailInput(
-    e: React.ChangeEvent<HTMLInputElement, HTMLInputElement>,
-  ) {
-    setEmail(e.target.value);
-    if (email !== "" || password !== "") {
-      setErrorMessage("");
-      return;
-    }
-  }
+  const navigate = useNavigate();
 
-  function handlePasswordInput(
-    e: React.ChangeEvent<HTMLInputElement, HTMLInputElement>,
-  ) {
-    setPassword(e.target.value);
-    if (email !== "" || password !== "" ) {
-      setErrorMessage("");
-      return;
-    }
-  }
-
-  async function handleLoginButton(
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-  ) {
-    e.preventDefault();
-    if (email === "" || password === "") {
-      setErrorMessage("Email and password fields cannot be empty");
-      return;
-    }
+  async function handleLoginButton(email: string, password: string) {
     try {
       const response = await fetch(
         `${import.meta.env.VITE_HOME_DOMAIN}/auth/signin`,
@@ -53,7 +34,6 @@ function Login() {
       localStorage.setItem("userId", `${data.userId}`);
 
       if (response.ok) {
-        setErrorMessage("");
         setTimeout(() => {
           navigate("/");
         }, 250);
@@ -63,21 +43,36 @@ function Login() {
     }
   }
 
+  const onSubmit: SubmitHandler<LogInFormType> = (formData) => {
+    handleLoginButton(formData.email, formData.password);
+  };
+
   return (
-    <form className="flex flex-col gap-3 rounded-[5px] bg-white p-7 font-josefin-sans drop-shadow-2xl dark:bg-[#25273D] dark:text-[#E3E4F1]">
+    <form
+      noValidate
+      onSubmit={handleSubmit(onSubmit)}
+      className="flex flex-col gap-3 rounded-[5px] bg-white p-7 font-josefin-sans drop-shadow-2xl dark:bg-[#25273D] dark:text-[#E3E4F1]"
+    >
       <div className="flex flex-col gap-2">
         <label htmlFor="email" className="text-[14px]/[100%]">
           Email Address
         </label>
         <input
           type="email"
-          name="email"
+          {...register("email", {
+            pattern: {
+              value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+              message: "Please enter valid email address",
+            },
+            required: "Please enter email address",
+          })}
           placeholder="Enter your email"
           className="rounded-[5px] border border-[#C8CBE7] p-[8px] dark:border-[#393A4B] dark:bg-[#171823]"
           id="email"
-          value={email}
-          onChange={handleEmailInput}
         />
+        {errors.email && (
+          <p className="text-sm text-red-400">{errors.email.message}</p>
+        )}
       </div>
       <div className="flex flex-col gap-2">
         <label htmlFor="password" className="text-[14px]/[100%]">
@@ -85,20 +80,23 @@ function Login() {
         </label>
         <input
           type="password"
-          name="password"
+          {...register("password", {
+            minLength: {
+              value: 6,
+              message: "Password cannot be less than 6 characters",
+            },
+            required: "Please enter password address",
+          })}
           placeholder="Enter your password"
           className="rounded-[5px] border border-[#C8CBE7] p-[8px] dark:border-[#393A4B] dark:bg-[#171823]"
           id="password"
-          autoComplete="true"
-          value={password}
-          onChange={handlePasswordInput}
+          autoComplete="off"
         />
-        <p className="text-sm text-red-400">{errorMessage}</p>
+        {errors.password && (
+          <p className="text-sm text-red-400">{errors.password.message}</p>
+        )}
       </div>
-      <button
-        onClick={handleLoginButton}
-        className="cursor-pointer rounded-[5px] bg-[#3A7CFD] p-[10px] text-white transition duration-300 hover:bg-blue-600 active:scale-105 dark:bg-blue-600 dark:hover:bg-[#3A7CFD]"
-      >
+      <button className="cursor-pointer rounded-[5px] bg-[#3A7CFD] p-[10px] text-white transition duration-300 hover:bg-blue-600 active:scale-105 dark:bg-blue-600 dark:hover:bg-[#3A7CFD]">
         Login
       </button>
       <Link
