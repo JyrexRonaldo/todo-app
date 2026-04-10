@@ -10,17 +10,14 @@ function TabBar({
   function handleActiveButton(
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) {
-    console.log(e.currentTarget.dataset.value);
     setList(e.currentTarget.dataset.value as string);
   }
   function handleAllButton(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
-    console.log(e.currentTarget.dataset.value);
     setList(e.currentTarget.dataset.value as string);
   }
   function handleCompletedButton(
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) {
-    console.log(e.currentTarget.dataset.value);
     setList(e.currentTarget.dataset.value as string);
   }
 

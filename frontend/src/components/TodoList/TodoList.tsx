@@ -21,7 +21,6 @@ type TodoListType = {
 function TodoList() {
   const { register, handleSubmit, resetField } = useForm<TodoListType>();
 
-  // const [todoText, setTodoText] = useState("");
   const [allTodos, setAllTodos] = useState<AllTodos>([]);
   const [list, setList] = useState("all");
 
@@ -49,14 +48,8 @@ function TodoList() {
     fetchData();
   }, []);
 
-  // function handleTodoInput(
-  //   e: React.ChangeEvent<HTMLInputElement, HTMLInputElement>,
-  // ) {
-  //   setTodoText(e.target.value);
-  // }
-
-  const onSubmit: SubmitHandler<TodoListType> = (formData) => {
-    uploadTodo(formData.todoText);
+  const onSubmit: SubmitHandler<TodoListType> = async (formData) => {
+  await uploadTodo(formData.todoText);
     resetField("todoText");
   };
 
@@ -87,44 +80,12 @@ function TodoList() {
     } catch (error) {
       console.log(error);
     }
-    // setTodoText("");
   }
 
   async function handleAddTodo(e: React.KeyboardEvent<HTMLInputElement>) {
-    // e.preventDefault()
-    console.log("Hi 5");
-    console.log(e.key);
     if (e.key === "Enter") {
-      handleSubmit(onSubmit, onError)();
+      await handleSubmit(onSubmit, onError)();
     }
-    // if (e.key === "Enter") {
-    // if (todoText.trim() === "") {
-    // return;
-    // }
-    // try {
-    //   const response = await fetch(
-    //     `${import.meta.env.VITE_HOME_DOMAIN}/api/todos`,
-    //     {
-    //       method: "POST",
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //         Authorization: `${localStorage.getItem("userToken")}`,
-    //       },
-    //       body: JSON.stringify({
-    //         userId: `${localStorage.getItem("userId")}`,
-    //         text: `${todoText}`,
-    //         position: allTodos.length,
-    //       }),
-    //     },
-    //   );
-
-    //   const data: AllTodos = await response.json();
-    //   setAllTodos([...allTodos, ...data]);
-    // } catch (error) {
-    //   console.log(error);
-    // }
-    // setTodoText("");
-    // }
   }
 
   async function handleDeleteTodo(todoId: number) {
@@ -179,7 +140,6 @@ function TodoList() {
   }
 
   async function clearCompletedHandler() {
-    console.log("cleared");
     try {
       const response = await fetch(
         `${import.meta.env.VITE_HOME_DOMAIN}/api/todos`,
@@ -201,7 +161,8 @@ function TodoList() {
 
   async function handleInput(completeStatus: boolean, todoId: number) {
     try {
-      const response = await fetch(
+      // const response =
+       await fetch(
         `${import.meta.env.VITE_HOME_DOMAIN}/api/todos/${todoId}`,
         {
           method: "PATCH",
@@ -215,18 +176,8 @@ function TodoList() {
         },
       );
 
-      const data = await response.json();
-      const updatedItemIndex = allTodos.findIndex(
-        (todo) => todo.id === data.todo.id,
-      );
-      allTodos.splice(updatedItemIndex, 1, data.todo);
-      // console.log(updatedItemIndex);
-      // console.log(data.todo);
-      // console.log(allTodos);
-      // setAllTodos([...allTodos, data.todo]);
-      // console.log(updatedTodoList)
-      console.log(allTodos);
-      setAllTodos([...allTodos]);
+      // const data = await response.json();
+      // console.log(data)
     } catch (error) {
       console.log(error);
     }
@@ -291,26 +242,6 @@ function TodoList() {
 
   return (
     <>
-      {/* <DragDropProvider
-        onDragEnd={async (event) => {
-          if (event.canceled) return;
-
-          const { source } = event.operation;
-
-          if (isSortable(source)) {
-            const { initialIndex, index } = source;
-
-            if (initialIndex !== index) {
-              const newItems = [...allTodos];
-              const [removed] = newItems.splice(initialIndex, 1);
-              newItems.splice(index, 0, removed);
-              newItems.forEach((item, index) => (item.position = index));
-              await updateItemPosition();
-              setAllTodos(newItems);
-            }
-          }
-        }}
-      > */}
       <div className="flex flex-col gap-[16px] drop-shadow-2xl">
         <div className="flex h-[48px] items-center rounded-[5px] bg-white px-[20.11px] text-[12px]/[100%] dark:bg-[#25273D] dark:text-[#9495A5]">
           <div className="mr-[16px] h-[20px] w-[20px] rounded-[50%] border border-[#979797] dark:border-[#393A4B]"></div>
@@ -320,8 +251,6 @@ function TodoList() {
             id=""
             {...register("todoText")}
             onKeyUp={handleAddTodo}
-            // onChange={handleTodoInput}
-            // value={todoText}
             className="w-full font-josefin-sans text-[12px]/[100%] outline-none sm:text-[18px]/[100%]"
           />
         </div>
@@ -380,7 +309,6 @@ function TodoList() {
       <p className="self-center font-josefin-sans text-[14px]/[100%] tracking-[-0.25px] text-[#9495A5] dark:text-[#5B5E7E]">
         Drag and drop to reorder list
       </p>
-      {/* </DragDropProvider> */}
     </>
   );
 }

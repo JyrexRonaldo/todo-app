@@ -1,5 +1,6 @@
-import { useState } from "react";
+// import { useState } from "react";
 import { useSortable } from "@dnd-kit/react/sortable";
+import { useForm, type SubmitHandler } from "react-hook-form";
 
 type TodoItemProps = {
   taskName: string;
@@ -20,35 +21,24 @@ function TodoItem({
   index,
   handleStatusInput,
 }: TodoItemProps) {
-  const [completeStatus, setCompleteStatus] = useState(status);
+  const { register, handleSubmit, setValue, getValues } = useForm({
+    defaultValues: {
+      completeStatus: status,
+    },
+  });
 
   const { ref } = useSortable({ id, index });
 
-  // async function handleInput() {
-  //   try {
-  //     const response =
-  //     await fetch(`${import.meta.env.VITE_HOME_DOMAIN}/api/todos/${todoId}`, {
-  //       method: "PATCH",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         Authorization: `${localStorage.getItem("userToken")}`,
-  //       },
-  //       body: JSON.stringify({
-  //         completeStatus: !completeStatus,
-  //       }),
-  //     });
+  const onSubmit: SubmitHandler<{ completeStatus: boolean }> = async (
+    formData,
+  ) => {
+    handleStatusInput(formData.completeStatus, todoId);
+    // set;
+  };
 
-  //     const data = await response.json()
-  //     console.log(data)
-  //     setCompleteStatus(!completeStatus);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // }
-
-  async function handleInputControl() {
-    setCompleteStatus(!completeStatus);
-    handleStatusInput(!completeStatus, todoId)
+  async function updateStatus() {
+    setValue("completeStatus", !getValues().completeStatus);
+    handleSubmit(onSubmit)();
   }
 
   return (
@@ -60,10 +50,9 @@ function TodoItem({
         <input
           className="custom-hover relative h-[20px] w-[20px] appearance-none rounded-[50%] border border-[#979797] align-[-2px] text-white before:invisible before:absolute before:top-[-1px] before:right-[-1px] before:block before:size-[20px] before:rounded-full before:bg-linear-135 before:from-[hsl(192,100%,67%)] before:to-[hsl(280,87%,65%)] after:invisible after:absolute after:top-[-1px] after:left-[3.5px] after:block after:text-[13px] after:content-['✓'] checked:before:visible checked:after:visible dark:border-[#393A4B]"
           type="checkbox"
-          name="completeStatus"
+          {...register("completeStatus")}
           id="completeStatus"
-          checked={completeStatus}
-          onChange={handleInputControl}
+          onChange={updateStatus}
         />
         <p className="w-[220px] flex-1 truncate font-josefin-sans text-[12px]/[100%] tracking-[-0.25px] text-[#494C6B] sm:text-[18px]/[100%] dark:text-[#E3E4F1]">
           {taskName}
