@@ -161,8 +161,7 @@ function TodoList() {
 
   async function handleInput(completeStatus: boolean, todoId: number) {
     try {
-      // const response =
-       await fetch(
+      const response = await fetch(
         `${import.meta.env.VITE_HOME_DOMAIN}/api/todos/${todoId}`,
         {
           method: "PATCH",
@@ -176,8 +175,7 @@ function TodoList() {
         },
       );
 
-      // const data = await response.json();
-      // console.log(data)
+      console.log(response)
     } catch (error) {
       console.log(error);
     }

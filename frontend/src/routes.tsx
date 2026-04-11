@@ -2,6 +2,7 @@ import App from "./components/App/App";
 import Login from "./components/Login/Login";
 import Signup from "./components/Signup/Signup";
 import TodoList from "./components/TodoList/TodoList";
+import ErrorPage from "./components/ErrorPage/ErrorPage";
 
 const routes = [
   {
@@ -18,6 +19,7 @@ const routes = [
         element: <Login />,
       },
     ],
+    errorElement: <ErrorPage />,
   },
 ];
 
