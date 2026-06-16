@@ -49,7 +49,7 @@ function TodoList() {
   }, []);
 
   const onSubmit: SubmitHandler<TodoListType> = async (formData) => {
-  await uploadTodo(formData.todoText);
+    await uploadTodo(formData.todoText);
     resetField("todoText");
   };
 
@@ -174,8 +174,9 @@ function TodoList() {
           }),
         },
       );
-
-      console.log(response)
+      const data = await response.json();
+      const updatedTodos = allTodos.filter((todo) => todo.id !== todoId);
+      setAllTodos([...updatedTodos, data.todo]);
     } catch (error) {
       console.log(error);
     }
